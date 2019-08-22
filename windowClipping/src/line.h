@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <iostream> 
 #include <math.h> 
+#include "ofxGui.h"
 using namespace std;
 
 #include "ofMain.h"
