@@ -31,16 +31,13 @@ public:
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
 
-	float interpolate(float x, float y, float accur);
-	std::vector<ofVec3f> bezier_curve(std::vector<ofVec3f>& anchor, float accur);
 	void buttonPressed();
-	void onMouseIn(ofVec2f & e);
 	void exit();
-	void SetupCurve(std::vector<ofVec3f> controlPoints, int controlPointsSize);
-	ofVec3f Bezier(float u, int n, std::vector<ofVec3f> controlPoints);
-	float Blending(float u, int n, int k);
-	int Coefficient(int n, int k);
-	int Factorial(int value);
+	void setupCurve(std::vector<ofVec3f> controlPoints, int controlPointsSize);
+	ofVec3f bezier(float u, int n, std::vector<ofVec3f> controlPoints);
+	float blending(float u, int n, int k);
+	int coefficient(int n, int k);
+	int factorial(int value);
 
 	ofxIntSlider accuracy;
 	ofxButton clearBtn;
@@ -49,17 +46,14 @@ public:
 	ofxFloatSlider zPos;
 	ofxButton button;
 	ofxButton drawLineBtn;
+	ofBoxPrimitive box;
+
 	std::list<CustomSphere> spheres;
 	std::vector<ofVec3f> controlPts;
 	std::vector<ofVec3f> bezierPts;
+
 	bool mouseIsPressed;
-	bool upPressed;
-	bool downPressed;
-	int zPosition;
-	ofBoxPrimitive box;
-	int currentPos;
 	bool drawLine;
-	//int j = 0;
-	//int i = 100;
-	//int k = 150;
+	int zPosition;
+	int currentPos;
 };

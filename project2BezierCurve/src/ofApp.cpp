@@ -9,10 +9,8 @@ void ofApp::setup() {
 	button.addListener(this, &ofApp::buttonPressed);
 	gui.setup();
 	gui.add(accuracy.setup("t", 5000, 1, 10000));
-	//gui.add(drawBtn.setup("draw"));
 	gui.add(clearBtn.setup("clear"));
 	gui.add(radius.setup("radius", 45, 10, 300));
-	//gui.add(zPos.setup("z", 140, -300, 300));
 	gui.add(button.setup("Add Sphere"));
 	gui.add(drawLineBtn.setup("Draw Bezier"));
 	ofBackground(0, 0, 0);
@@ -53,11 +51,8 @@ void ofApp::draw() {
 	if (drawLineBtn) drawLine = true;
 
 	if (spheres.size() > 1 && drawLine) {
-		int j = 0;
 		for (auto & s : spheres) {
 			controlPts.push_back(s.getPosition());
-			std::cout << controlPts[j].x << " " << controlPts[j].y << " " << controlPts[j].z << endl;
-			++j;
 		}
 
 		SetupCurve(controlPts, controlPts.size());
@@ -144,7 +139,7 @@ void ofApp::dragEvent(ofDragInfo dragInfo) {
 
 }
 
-void ofApp::SetupCurve(std::vector<ofVec3f> controlPoints, int controlPointsSize) {
+void ofApp::setupCurve(std::vector<ofVec3f> controlPoints, int controlPointsSize) {
 	float step = 1.0f / accuracy;
 
 	float u = 0;
@@ -154,7 +149,7 @@ void ofApp::SetupCurve(std::vector<ofVec3f> controlPoints, int controlPointsSize
 	}
 }
 
-ofVec3f ofApp::Bezier(float u, int n, std::vector<ofVec3f> controlPoints) {
+ofVec3f ofApp::bezier(float u, int n, std::vector<ofVec3f> controlPoints) {
 	float acumX = 0;
 	float acumY = 0;
 	float acumZ = 0;
@@ -167,15 +162,15 @@ ofVec3f ofApp::Bezier(float u, int n, std::vector<ofVec3f> controlPoints) {
 	return ofVec3f(acumX, acumY, acumZ);
 }
 
-float ofApp::Blending(float u, int n, int k) {
+float ofApp::blending(float u, int n, int k) {
 	return Coefficient(n, k) * pow(u, k) * pow(1 - u, n - k);
 }
 
-int ofApp::Coefficient(int n, int k) {
+int ofApp::coefficient(int n, int k) {
 	return Factorial(n) / (Factorial(k) * Factorial(n - k));
 }
 
-int ofApp::Factorial(int value) {
+int ofApp::factorial(int value) {
 	int accum = 1;
 	for (int i = 1; i <= value; i++) {
 		accum *= i;
@@ -188,6 +183,5 @@ void ofApp::exit() {
 }
 
 void ofApp::buttonPressed() {
-	//++j;
 	spheres.emplace_back(radius);
 }
