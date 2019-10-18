@@ -55,7 +55,7 @@ void ofApp::draw() {
 			controlPts.push_back(s.getPosition());
 		}
 
-		SetupCurve(controlPts, controlPts.size());
+		setupCurve(controlPts, controlPts.size());
 		if (bezierPts.size() > 1) {
 			ofSetColor(ofColor::red);
 			for (unsigned int i = 0; i < controlPts.size() - 1; ++i) {
@@ -154,7 +154,7 @@ ofVec3f ofApp::bezier(float u, int n, std::vector<ofVec3f> controlPoints) {
 	float acumY = 0;
 	float acumZ = 0;
 	for (int i = 0; i < n + 1; ++i) {
-		float blend = Blending(u, n, i);
+		float blend = blending(u, n, i);
 		acumX += controlPoints[i].x * blend;
 		acumY += controlPoints[i].y * blend;
 		acumZ += controlPoints[i].z * blend;
@@ -163,11 +163,11 @@ ofVec3f ofApp::bezier(float u, int n, std::vector<ofVec3f> controlPoints) {
 }
 
 float ofApp::blending(float u, int n, int k) {
-	return Coefficient(n, k) * pow(u, k) * pow(1 - u, n - k);
+	return coefficient(n, k) * pow(u, k) * pow(1 - u, n - k);
 }
 
 int ofApp::coefficient(int n, int k) {
-	return Factorial(n) / (Factorial(k) * Factorial(n - k));
+	return factorial(n) / (factorial(k) * factorial(n - k));
 }
 
 int ofApp::factorial(int value) {
