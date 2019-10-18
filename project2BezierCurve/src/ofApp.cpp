@@ -68,10 +68,10 @@ void ofApp::draw() {
 			}
 
 			ofSetColor(ofColor::darkGreen);
-			if (currentPos < bezierPts.size() - 1) { 
+			if (currentPos < bezierPts.size() - 20) { 
 				box.setPosition(bezierPts[currentPos]);
 				box.draw();
-				++currentPos;
+				currentPos += 20;
 			} else currentPos = 0;
 		}
 	}
