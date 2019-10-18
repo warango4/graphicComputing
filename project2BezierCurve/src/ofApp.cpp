@@ -2,150 +2,185 @@
 
 #include "ofApp.h"
 
-
 //--------------------------------------------------------------
-void ofApp::setup(){
+void ofApp::setup() {
+
 	ofSetWindowTitle("Bézier Curve");
-    button.addListener(this, &ofApp::buttonPressed);
+	button.addListener(this, &ofApp::buttonPressed);
 	gui.setup();
-    gui.add(accuracy.setup("t", 5000, 1, 10000));
-    //gui.add(drawBtn.setup("draw"));
-    gui.add(clearBtn.setup("clear"));
-    gui.add(radius.setup("radius", 140, 10, 300));
+	gui.add(accuracy.setup("t", 5000, 1, 10000));
+	//gui.add(drawBtn.setup("draw"));
+	gui.add(clearBtn.setup("clear"));
+	gui.add(radius.setup("radius", 45, 10, 300));
+	//gui.add(zPos.setup("z", 140, -300, 300));
 	gui.add(button.setup("Add Sphere"));
-    gui.add(drawLineBtn.setup("Draw Bezier"));
-    ofBackground(0, 0, 0);
+	gui.add(drawLineBtn.setup("Draw Bezier"));
+	ofBackground(0, 0, 0);
 	mouseIsPressed = false;
+	drawLine = false;
+	currentPos = 500;
 
 	ofSetFrameRate(60); // if vertical sync is off, we can go a bit fast... this caps the framerate at 60fps.
+
+	box.set(50);
 }
 
 //--------------------------------------------------------------
-void ofApp::update(){
-    
+void ofApp::update() {
+
 }
 
 //--------------------------------------------------------------
-void ofApp::draw(){
-	if(clearBtn) spheres.clear();
-    int x = 0;
+void ofApp::draw() {
+	ofEnableDepthTest();
+	controlPts.clear();
+	bezierPts.clear();
+
+	if (clearBtn) {
+		drawLine = false;
+		spheres.clear();
+		zPosition = 0;
+		currentPos = 500;
+	}
+
 	for (auto & s : spheres) {
-		//s.setPosition(200 * (x + 1), 200, 0);
-		//if(i == 0) s.setPosition(200 * (x + 1), 200, 0);
-		++x;
-		if(s.inside(ofGetMouseX(), ofGetMouseY()) && mouseIsPressed == true) {
-			s.setPosition(ofGetMouseX(), ofGetMouseY(), 0);
+		if (s.inside(ofGetMouseX(), ofGetMouseY()) && mouseIsPressed == true) {
+			s.setPosition(ofGetMouseX(), ofGetMouseY(), zPosition);
 		}
 		s.draw();
 	}
 
-	if(spheres.size() > 1 && drawLineBtn) {
-		for(auto & s : spheres){
+	if (drawLineBtn) drawLine = true;
+
+	if (spheres.size() > 1 && drawLine) {
+		int j = 0;
+		for (auto & s : spheres) {
 			controlPts.push_back(s.getPosition());
+			std::cout << controlPts[j].x << " " << controlPts[j].y << " " << controlPts[j].z << endl;
+			++j;
 		}
-		std::vector<ofVec3f> end = bezier_curve(controlPts, accuracy);
-		if(end.size() > 1) {
-            ofSetColor(ofColor::red);
-            for(unsigned int i = 0; i < controlPts.size() - 1; ++i){
-                ofDrawLine(controlPts[i].x, controlPts[i].y, controlPts[i + 1].x, controlPts[i + 1].y);
-            }
-            ofSetColor(ofColor::blue);
-            for(unsigned int i = 0; i < end.size(); ++i) {
-                //if(i == 0) cout << end.size() << endl;
-                //cout << end[i].x << " " << end[i].y << endl;
-                //path.circle(end[i].x, end[i].y, 0.1);
-                //path.draw();
-                ofDrawSphere(end[i].x, end[i].y, end[i].z, 1);
-            }
-        }
+
+		SetupCurve(controlPts, controlPts.size());
+		if (bezierPts.size() > 1) {
+			ofSetColor(ofColor::red);
+			for (unsigned int i = 0; i < controlPts.size() - 1; ++i) {
+				ofDrawLine(controlPts[i].x, controlPts[i].y, controlPts[i].z, controlPts[i + 1].x, controlPts[i + 1].y, controlPts[i + 1].z);
+			}
+
+			ofSetColor(ofColor::blue);
+			for (unsigned int i = 0; i < bezierPts.size(); ++i) {
+				ofDrawSphere(bezierPts[i].x, bezierPts[i].y, bezierPts[i].z, 1);
+			}
+
+			ofSetColor(ofColor::darkGreen);
+			if (currentPos < bezierPts.size() - 1) { 
+				box.setPosition(bezierPts[currentPos]);
+				box.draw();
+				++currentPos;
+			} else currentPos = 0;
+		}
 	}
-    gui.draw();    
-}
-
-
-//--------------------------------------------------------------
-void ofApp::keyPressed(int key){
-	
+	ofDisableDepthTest();
+	gui.draw();
 }
 
 //--------------------------------------------------------------
-void ofApp::keyReleased(int key){
+void ofApp::keyPressed(int key) {
+
 
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseMoved(int x, int y ){
+void ofApp::keyReleased(int key) {
+	if (key == OF_KEY_UP) {
+		zPosition += 10;
+	}
+	if (key == OF_KEY_DOWN) {
+		zPosition -= 10;
+	}
+}
+
+//--------------------------------------------------------------
+void ofApp::mouseMoved(int x, int y) {
 
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseDragged(int x, int y, int button){
+void ofApp::mouseDragged(int x, int y, int button) {
 }
 
 //--------------------------------------------------------------
-void ofApp::mousePressed(int x, int y, int button){
+void ofApp::mousePressed(int x, int y, int button) {
 	mouseIsPressed = true;
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseReleased(int x, int y, int button){
+void ofApp::mouseReleased(int x, int y, int button) {
 	mouseIsPressed = false;
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseEntered(int x, int y){
+void ofApp::mouseEntered(int x, int y) {
 
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseExited(int x, int y){
+void ofApp::mouseExited(int x, int y) {
 
 }
 
 //--------------------------------------------------------------
-void ofApp::windowResized(int w, int h){
+void ofApp::windowResized(int w, int h) {
 
 }
 
 //--------------------------------------------------------------
-void ofApp::gotMessage(ofMessage msg){
+void ofApp::gotMessage(ofMessage msg) {
 
 }
 
 //--------------------------------------------------------------
-void ofApp::dragEvent(ofDragInfo dragInfo){ 
+void ofApp::dragEvent(ofDragInfo dragInfo) {
 
 }
 
-float ofApp::interpolate(float pos1, float pos2, float accur){
-    //return pos1 + ((pos1 - pos2) * accur);
-    return (1 - accur) * pos1 + accur * pos2;
+void ofApp::SetupCurve(std::vector<ofVec3f> controlPoints, int controlPointsSize) {
+	float step = 1.0f / accuracy;
+
+	float u = 0;
+	for (int i = 0; i <= accuracy; ++i) {
+		bezierPts.push_back(Bezier(u, controlPointsSize - 1, controlPoints));
+		u += step;
+	}
 }
 
-std::vector<ofVec3f> ofApp::bezier_curve(std::vector<ofVec3f>& anchor, float accur){
-    if(anchor.size() <= 2) return anchor;
+ofVec3f ofApp::Bezier(float u, int n, std::vector<ofVec3f> controlPoints) {
+	float acumX = 0;
+	float acumY = 0;
+	float acumZ = 0;
+	for (int i = 0; i < n + 1; ++i) {
+		float blend = Blending(u, n, i);
+		acumX += controlPoints[i].x * blend;
+		acumY += controlPoints[i].y * blend;
+		acumZ += controlPoints[i].z * blend;
+	}
+	return ofVec3f(acumX, acumY, acumZ);
+}
 
-    std::vector<ofVec3f> end;
-    //end.push_back(anchor.front());
+float ofApp::Blending(float u, int n, int k) {
+	return Coefficient(n, k) * pow(u, k) * pow(1 - u, n - k);
+}
 
-    for(float i = 0.f; i < accur; ++i){
-        float t = i / accur;
+int ofApp::Coefficient(int n, int k) {
+	return Factorial(n) / (Factorial(k) * Factorial(n - k));
+}
 
-        std::vector<ofVec3f> temp(anchor);
-
-        while(temp.size() > 1){
-            std::vector<ofVec3f> temp2;
-            for (unsigned int j = 1; j < temp.size(); ++j)
-                temp2.push_back(ofVec3f(interpolate(temp[j-1].x, temp[j].x, t),
-                                        interpolate(temp[j-1].y, temp[j].y, t),
-										0));
-            temp.swap(temp2);
-        }
-
-        end.push_back(temp.front());
-    }
-
-    return end;
+int ofApp::Factorial(int value) {
+	int accum = 1;
+	for (int i = 1; i <= value; i++) {
+		accum *= i;
+	}
+	return accum;
 }
 
 void ofApp::exit() {
