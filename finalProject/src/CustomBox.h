@@ -13,7 +13,7 @@ public:
         ofBoxPrimitive::setHeight(height);
         ofBoxPrimitive::setWidth(width);
         ofBoxPrimitive::setDepth(depth);
-        //this->setPosition(800, 400, 0);
+        this->setPosition(800, 400, 0);
 		GetInfo();
 	}
 

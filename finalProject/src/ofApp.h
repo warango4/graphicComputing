@@ -62,15 +62,24 @@ public:
 	std::list<CustomBox> boxes;
 	std::list<CustomCone> cones;
 
-	bool upPressed;
-	bool downPressed;
 	bool mouseIsPressed = false;
 	bool drawBoxWireframe = false;
 	bool drawConeWireframe = false;
 	bool drawSphereWireframe = false;
+	bool bDrawLights = false;
+	bool rotateCones = false;
+	bool rotateBoxes = false;
+	bool rotateSpheres = false;
 
 	int zPosition;
 	int currentPos;
 
+	//ofCamera cam;
 	ofEasyCam cam;
+	ofImage texture;
+
+	ofLight pointLight;
+    ofLight pointLight2;
+    ofLight pointLight3;
+    ofMaterial material;
 };
