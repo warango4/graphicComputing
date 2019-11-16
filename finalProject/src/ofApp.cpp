@@ -36,11 +36,6 @@ void ofApp::setup() {
 
     pointLight3.setDiffuseColor( ofFloatColor(19.f/255.f,94.f/255.f,77.f/255.f) );
     pointLight3.setSpecularColor( ofFloatColor(18.f/255.f,150.f/255.f,135.f/255.f) );
-
-    // shininess is a value between 0 - 128, 128 being the most shiny //
-    material.setShininess( 120 );
-    // the light highlight of the material //
-    material.setSpecularColor(ofColor(255, 255, 255, 255));
 }
 
 //--------------------------------------------------------------
@@ -141,7 +136,6 @@ void ofApp::draw() {
 		b.draw();
 	}
 
-	//cam.end();
 	ofDisableDepthTest();
 
 	gui.draw();
@@ -226,45 +220,6 @@ void ofApp::dragEvent(ofDragInfo dragInfo) {
 
 }
 
-/**void ofApp::SetupCurve(std::vector<ofVec3f> controlPoints, int controlPointsSize) {
-	float step = 1.0f / accuracy;
-
-	float u = 0;
-	for (int i = 0; i <= accuracy; ++i) {
-		bezierPts.push_back(Bezier(u, controlPointsSize - 1, controlPoints));
-		u += step;
-	}
-}
-
-ofVec3f ofApp::Bezier(float u, int n, std::vector<ofVec3f> controlPoints) {
-	float acumX = 0;
-	float acumY = 0;
-	float acumZ = 0;
-	for (int i = 0; i < n + 1; ++i) {
-		float blend = Blending(u, n, i);
-		acumX += controlPoints[i].x * blend;
-		acumY += controlPoints[i].y * blend;
-		acumZ += controlPoints[i].z * blend;
-	}
-	return ofVec3f(acumX, acumY, acumZ);
-}
-
-float ofApp::Blending(float u, int n, int k) {
-	return Coefficient(n, k) * pow(u, k) * pow(1 - u, n - k);
-}
-
-int ofApp::Coefficient(int n, int k) {
-	return Factorial(n) / (Factorial(k) * Factorial(n - k));
-}
-
-int ofApp::Factorial(int value) {
-	int accum = 1;
-	for (int i = 1; i <= value; i++) {
-		accum *= i;
-	}
-	return accum;
-}**/
-
 void ofApp::exit() {
 	addSphere.removeListener(this, &ofApp::addSpherePressed);
 	addCone.removeListener(this, &ofApp::addConePressed);
@@ -272,7 +227,6 @@ void ofApp::exit() {
 }
 
 void ofApp::addSpherePressed() {
-	//++j;
 	spheres.emplace_back(radius);
 }
 

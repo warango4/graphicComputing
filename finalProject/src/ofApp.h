@@ -32,19 +32,12 @@ public:
 	void windowResized(int w, int h);
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
-
-	//float interpolate(float x, float y, float accur);
-	//std::vector<ofVec3f> bezier_curve(std::vector<ofVec3f>& anchor, float accur);
+	
 	void addSpherePressed();
 	void addConePressed();
 	void addBoxPressed();
 	void onMouseIn(ofVec2f & e);
 	void exit();
-	/**void SetupCurve(std::vector<ofVec3f> controlPoints, int controlPointsSize);
-	ofVec3f Bezier(float u, int n, std::vector<ofVec3f> controlPoints);
-	float Blending(float u, int n, int k);
-	int Coefficient(int n, int k);
-	int Factorial(int value);**/
 
 	ofxPanel gui;
 
@@ -71,15 +64,10 @@ public:
 	bool rotateBoxes = false;
 	bool rotateSpheres = false;
 
-	int zPosition;
-	int currentPos;
-
-	//ofCamera cam;
 	ofEasyCam cam;
 	ofImage texture;
 
 	ofLight pointLight;
     ofLight pointLight2;
     ofLight pointLight3;
-    ofMaterial material;
 };
