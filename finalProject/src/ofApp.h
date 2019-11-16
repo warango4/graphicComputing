@@ -64,6 +64,9 @@ public:
 	bool rotateBoxes = false;
 	bool rotateSpheres = false;
 
+	int zPosition;
+	int currentPos;
+
 	ofEasyCam cam;
 	ofImage texture;
 
